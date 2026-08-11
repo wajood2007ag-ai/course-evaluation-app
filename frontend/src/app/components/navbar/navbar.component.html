@@ -1,0 +1,22 @@
+<mat-toolbar color="primary" *ngIf="authService.isLoggedIn()">
+  <span style="font-family: 'Cairo', sans-serif; font-weight: 700; font-size: 1.1rem;">
+    🎓 تقييم المقررات الدراسية
+  </span>
+  <span style="flex: 1 1 auto;"></span>
+
+  <button mat-button routerLink="/student/courses" *ngIf="authService.isStudent()">
+    <mat-icon>menu_book</mat-icon> المقررات
+  </button>
+
+  <button mat-button routerLink="/admin/dashboard" *ngIf="authService.isAdmin()">
+    <mat-icon>dashboard</mat-icon> لوحة التحكم
+  </button>
+
+  <span style="margin: 0 12px; opacity: 0.85; font-size: 0.9rem; font-family: 'Cairo';">
+    {{ authService.getUsername() }}
+  </span>
+
+  <button mat-icon-button (click)="logout()" matTooltip="تسجيل الخروج">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>
