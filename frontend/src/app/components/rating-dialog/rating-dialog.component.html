@@ -1,0 +1,58 @@
+<h2 mat-dialog-title style="font-family:'Cairo',sans-serif;">
+  تقييم: {{ data.course.name }}
+</h2>
+
+<mat-dialog-content style="padding:8px 24px 16px; min-width:420px;">
+
+  <!-- Star Rating -->
+  <div style="margin-bottom:20px;">
+    <p style="font-family:'Cairo',sans-serif; font-weight:600; margin-bottom:10px; color:#333;">
+      التقييم بالنجوم <span style="color:red;">*</span>
+    </p>
+    <div style="display:flex; gap:6px;">
+      <mat-icon
+        *ngFor="let star of stars"
+        (click)="setStar(star)"
+        (mouseenter)="hoveredStar = star"
+        (mouseleave)="hoveredStar = 0"
+        style="cursor:pointer; font-size:2.2rem; width:2.2rem; height:2.2rem; transition:color 0.1s;"
+        [style.color]="star <= (hoveredStar || selectedStar) ? '#f59e0b' : '#d1d5db'">
+        {{ getStarIcon(star) }}
+      </mat-icon>
+    </div>
+    <p *ngIf="selectedStar === 0" style="color:#f44336; font-size:0.8rem; margin-top:6px; font-family:'Cairo';">
+      يرجى اختيار تقييم
+    </p>
+    <p *ngIf="selectedStar > 0" style="color:#555; font-size:0.85rem; margin-top:6px; font-family:'Cairo';">
+      تقييمك: {{ selectedStar }} من 5
+    </p>
+  </div>
+
+  <!-- Comment -->
+  <form [formGroup]="ratingForm">
+    <mat-form-field appearance="outline" style="width:100%;">
+      <mat-label>تعليقك على المقرر</mat-label>
+      <textarea matInput formControlName="comment" rows="4"
+                placeholder="شاركنا رأيك في هذا المقرر..."></textarea>
+      <mat-error *ngIf="ratingForm.get('comment')?.hasError('required')">
+        التعليق مطلوب
+      </mat-error>
+      <mat-error *ngIf="ratingForm.get('comment')?.hasError('minlength')">
+        التعليق يجب أن يكون 10 أحرف على الأقل
+      </mat-error>
+    </mat-form-field>
+  </form>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="padding:12px 24px; gap:8px;">
+  <button mat-button mat-dialog-close style="font-family:'Cairo',sans-serif;">إلغاء</button>
+  <button mat-raised-button color="primary"
+          [disabled]="ratingForm.invalid || selectedStar === 0 || submitting"
+          (click)="submit()"
+          style="font-family:'Cairo',sans-serif;">
+    <mat-spinner *ngIf="submitting" diameter="18" style="display:inline-block; margin-left:6px;"></mat-spinner>
+    <mat-icon *ngIf="!submitting">send</mat-icon>
+    {{ submitting ? 'جارٍ الإرسال...' : 'إرسال التقييم' }}
+  </button>
+</mat-dialog-actions>
