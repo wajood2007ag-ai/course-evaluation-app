@@ -1,0 +1,60 @@
+<div class="page-container">
+  <h1 style="font-family:'Cairo',sans-serif; color:#3f51b5; margin-bottom:4px;">
+    📚 المقررات الدراسية
+  </h1>
+  <p style="color:#666; margin-bottom:28px; font-family:'Cairo';">قيّم مقرراتك الدراسية لهذا الفصل</p>
+
+  <!-- Loading -->
+  <div *ngIf="loading" style="text-align:center; padding:64px;">
+    <mat-spinner style="margin:0 auto;"></mat-spinner>
+  </div>
+
+  <!-- Courses Grid -->
+  <div *ngIf="!loading"
+       style="display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:20px;">
+
+    <mat-card *ngFor="let course of courses"
+              style="border-radius:12px !important;"
+              [style.border]="isRated(course.id) ? '2px solid #4caf50' : '2px solid #e0e0e0'">
+
+      <mat-card-header style="padding:16px 16px 0;">
+        <mat-card-title style="font-family:'Cairo',sans-serif; font-size:1.05rem; font-weight:700;">
+          {{ course.name }}
+        </mat-card-title>
+        <mat-card-subtitle style="margin-top:4px; font-family:'Cairo';">
+          <mat-icon style="font-size:14px; vertical-align:middle; color:#888;">calendar_today</mat-icon>
+          {{ course.semester }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content style="padding:8px 16px 0; min-height:50px;">
+        <p style="color:#666; font-size:0.9rem; font-family:'Cairo';">{{ course.description }}</p>
+      </mat-card-content>
+
+      <mat-card-actions style="padding:8px 16px 16px;">
+        <!-- Already rated -->
+        <div *ngIf="isRated(course.id)"
+             style="display:flex; align-items:center; gap:6px; color:#4caf50; font-family:'Cairo';">
+          <mat-icon>check_circle</mat-icon>
+          <span style="font-weight:600;">تم التقييم</span>
+        </div>
+        <!-- Rate button -->
+        <button *ngIf="!isRated(course.id)"
+                mat-raised-button color="primary"
+                (click)="openRatingDialog(course)"
+                style="font-family:'Cairo',sans-serif;">
+          <mat-icon>star_rate</mat-icon>
+          قيّم المقرر
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!loading && courses.length === 0"
+       style="text-align:center; padding:64px; color:#999; font-family:'Cairo';">
+    <mat-icon style="font-size:3rem; width:auto; height:auto;">menu_book</mat-icon>
+    <p>لا توجد مقررات متاحة حالياً</p>
+  </div>
+</div>
